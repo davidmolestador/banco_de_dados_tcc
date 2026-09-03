@@ -72,7 +72,7 @@ if (tabelas.length === 0) {
 return res.json([]);
 }
 
-const [rows] = await pool.query('SELECT * FROM `produto` ORDER BY id DESC');
+const [rows] = await pool.query('SELECT * FROM `produto`');
 res.json(rows);
 } catch (error: any) {
 console.error('Erro ao buscar produtos:', error);
