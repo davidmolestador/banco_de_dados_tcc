@@ -11,6 +11,57 @@ app.use(express.json());
 app.use(cors());
 app.use(express.json())
 
+// ================= ROTA PARA CADASTRAR USUÁRIO =================
+app.post('/usuarios', async (req, res) => {
+  const { Nome, Email, Telefone, CPF, Senha  } = req.body;
+
+  // 1. Validação básica de entrada
+  if (!Nome || !Email || !Senha || !Telefone || !CPF) {
+    return res.status(400).json({ error: 'Nome, Email, Telefono,senha e CPF são obrigatórios.' });
+  }
+
+  try {
+    // 2. Garante que a tabela de usuários existe
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS \`usuarios\` (
+        CPF INT(11) PRIMARY KEY,
+        Nome VARCHAR(255) NOT NULL,
+        Email VARCHAR(255) NOT NULL UNIQUE,
+        Senha VARCHAR(255) NOT NULL,
+        Telefone VARCHAR(255) NOT NULL,
+        DATA_CADASTRO TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // 3. Verifica se o e-mail já está em uso
+    const [usuarioExistente]: any = await pool.query(
+      'SELECT id FROM `usuarios` WHERE email = ?',
+      [email]
+    );
+
+    if (usuarioExistente.length > 0) {
+      return res.status(409).json({ error: 'Este e-mail já está cadastrado.' });
+    }
+
+    
+    // 5. Salva o usuário no banco
+    const queryInsercao = 'INSERT INTO `usuarios` (Nome, Email, Senha, Telefone, CPF) VALUES (?, ?, ?, ?, ?)';
+    const [result]: any = await pool.query(queryInsercao, [nome, email, senha, telefone, cpf]);
+
+    // Retorna 201 Created sem expor a senha
+    res.status(201).json({
+      mensagem: 'Usuário cadastrado com sucesso!',
+      usuario: {
+        id: result.insertId,
+        nome,
+        email
+      }
+    });
+  } catch (error: any) {
+    console.error('Erro ao cadastrar usuário:', error);
+    res.status(500).json({ error: 'Erro interno ao salvar o usuário.' });
+  }
+});
 // ================= ROTA PARA INSERIR PRODUTO (E CRIAR A TABELA SE NÃO EXISTIR) =================
 app.post('/produtos', async (req, res) => {
 const { nome, preco } = req.body;
