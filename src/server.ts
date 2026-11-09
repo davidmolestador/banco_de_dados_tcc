@@ -24,7 +24,7 @@ app.post('/usuarios', async (req, res) => {
     // 2. Garante que a tabela de usuários existe
     await pool.query(`
       CREATE TABLE IF NOT EXISTS \`usuarios\` (
-        CPF INT(11) PRIMARY KEY,
+        CPF VARCHAR(255) PRIMARY KEY,
         Nome VARCHAR(255) NOT NULL,
         Email VARCHAR(255) NOT NULL UNIQUE,
         Senha VARCHAR(255) NOT NULL,
