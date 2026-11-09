@@ -36,7 +36,7 @@ app.post('/usuarios', async (req, res) => {
     // 3. Verifica se o e-mail já está em uso
     const [emailExistente]: any = await pool.query(
   'SELECT CPF FROM `usuario` WHERE Email = ?',
-  [email]
+  [Email]
 );
 
 if (emailExistente.length > 0) {
@@ -46,7 +46,7 @@ if (emailExistente.length > 0) {
 // 3.1 Verifica se o CPF já está em uso (Evita quebra por Primary Key)
 const [cpfExistente]: any = await pool.query(
   'SELECT CPF FROM `usuario` WHERE CPF = ?',
-  [cpf]
+  [CPF]
 );
 
 if (cpfExistente.length > 0) {
@@ -62,8 +62,8 @@ if (cpfExistente.length > 0) {
       mensagem: 'Usuário cadastrado com sucesso!',
       usuario: {
         id: result.insertId,
-        nome,
-        email
+        Nome,
+        Email
       }
     });
   } catch (error: any) {
