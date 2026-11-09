@@ -35,7 +35,7 @@ app.post('/usuarios', async (req, res) => {
 
     // 3. Verifica se o e-mail já está em uso
     const [emailExistente]: any = await pool.query(
-  'SELECT CPF FROM `criar conta` WHERE E_MAIL = ?',
+  'SELECT CPF FROM `usuario` WHERE Email = ?',
   [email]
 );
 
@@ -45,7 +45,7 @@ if (emailExistente.length > 0) {
 
 // 3.1 Verifica se o CPF já está em uso (Evita quebra por Primary Key)
 const [cpfExistente]: any = await pool.query(
-  'SELECT CPF FROM `criar conta` WHERE CPF = ?',
+  'SELECT CPF FROM `usuario` WHERE CPF = ?',
   [cpf]
 );
 
@@ -55,7 +55,7 @@ if (cpfExistente.length > 0) {
     
     // 5. Salva o usuário no banco
     const queryInsercao = 'INSERT INTO `usuarios` (Nome, Email, Senha, Telefone, CPF) VALUES (?, ?, ?, ?, ?)';
-    const [result]: any = await pool.query(queryInsercao, [nome, email, senha, telefone, cpf]);
+    const [result]: any = await pool.query(queryInsercao, [Nome, Email, Senha, Telefone, CPF]);
 
     // Retorna 201 Created sem expor a senha
     res.status(201).json({
