@@ -28,7 +28,7 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'E-mail ou senha incorretos.' });
     }
 
-    const usuario = rows[0];
+    const usuarios = rows[0];
 
     if (usuario.Senha !== Senha) {
       return res.status(401).json({ error: 'E-mail ou senha incorretos.' });
