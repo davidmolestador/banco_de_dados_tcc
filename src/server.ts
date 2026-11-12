@@ -30,7 +30,7 @@ app.post('/login', async (req, res) => {
 
     const usuarios = rows[0];
 
-    if (usuario.Senha !== Senha) {
+    if (usuarios.Senha !== Senha) {
       return res.status(401).json({ error: 'E-mail ou senha incorretos.' });
     }
 
@@ -38,16 +38,16 @@ app.post('/login', async (req, res) => {
 
     await pool.query(
       'UPDATE `usuarios` SET TOKEN = ? WHERE CPF = ?',
-      [token, usuario.CPF]
+      [token, usuarios.CPF]
     );
 
     return res.status(200).json({
       mensagem: 'Login realizado com sucesso!',
       token: token,
       usuario: {
-        CPF: usuario.CPF,
-        Nome: usuario.Nome,
-        Email: usuario.email_banco
+        CPF: usuarios.CPF,
+        Nome: usuarios.Nome,
+        Email: usuarios.email_banco
       }
     });
 
