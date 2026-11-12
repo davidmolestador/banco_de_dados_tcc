@@ -20,7 +20,7 @@ app.post('/login', async (req, res) => {
 
   try {
     const [rows] = await pool.query(
-      'SELECT CPF, Nome, `Email` as email_banco, SENHA FROM `usuarios` WHERE `Email` = ?',
+      'SELECT CPF, Nome, `Email` as email_banco, Senha FROM `usuarios` WHERE `Email` = ?',
       [Email]
     ) as any[];
 
