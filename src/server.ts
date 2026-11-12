@@ -44,7 +44,7 @@ app.post('/login', async (req, res) => {
     return res.status(200).json({
       mensagem: 'Login realizado com sucesso!',
       token: token,
-      usuario: {
+      usuarios: {
         CPF: usuarios.CPF,
         Nome: usuarios.Nome,
         Email: usuarios.email_banco
